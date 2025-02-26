@@ -1,7 +1,8 @@
 ## Скриншоты
 
 ### Главный экран
-![Главный экран](Screenshot_main_page.png)
+![Главный экран](Screenshot_main_page-small.png)
+
 
 
 ### Экран настроек

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/home_page.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoInfo extends StatefulWidget {
   const VideoInfo({super.key});
@@ -13,6 +14,9 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
+  bool _isPlaying=false;
+  bool _disposed = false;
+  VideoPlayerController? _controller;
 
   Future<void> _initData() async {
     await DefaultAssetBundle.of(context).loadString("assets/video_info.json").then((value) {
@@ -26,6 +30,15 @@ class _VideoInfoState extends State<VideoInfo> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void dispose(){
+    _disposed = true;
+    _controller?.pause();
+    _controller?.dispose();
+    _controller=null;
+    super.dispose();
   }
 
 
@@ -177,7 +190,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       color: Colors.white)
                     ],),
                   ),
-                  _playView(context)
+                  _playView(context),
+                  _controlView(context)
                 ],
               ),
             ),
@@ -229,11 +243,118 @@ class _VideoInfoState extends State<VideoInfo> {
       ),
       );
   }
-  _playView(BuildContext){
+ Widget _controlView(BuildContext context) {
+  return Container(
+    height: 120,
+    width: MediaQuery.of(context).size.width,
+    color: Colors.blue,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(onPressed: () async {
+    
+        },
+        child:Icon(Icons.fast_rewind,
+        size: 36,
+        color: Colors.white)
+        ),
+        TextButton(onPressed: () async {
+          if(_isPlaying) {
+            setState(() {
+              _isPlaying=false;
+            });
+            _controller?.pause();
+          } else {
+            setState(() {
+              _isPlaying=true;
+            });
+            _controller?.play();
+          }
+    
+        },
+        child:Icon(_isPlaying?Icons.pause:Icons.play_arrow,
+        size: 36,
+        color: Colors.white)
+        ),
+        TextButton(onPressed: () async {
+    
+        },
+        child:Icon(Icons.fast_forward,
+        size: 36,
+        color: Colors.white)
+        )
+        
+      ],
+    ),
+  );
 
   }
-  _onTapVideo(int index) {
+
+  Widget _playView(BuildContext context){
+    final controller = _controller;
+    if(controller!=null&&controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: 16/9,
+        child: VideoPlayer(controller),
+      ) ;
+    } else {
+      return AspectRatio(
+        aspectRatio: 16/9,
+        child: Center(child: Text("Preparing...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.white
+        ),)));
+    }
+  }
+  var _onUpdateControllerTime;
+
+  void _onControllerUpdate() async{
+    if(_disposed){
+      return;
+    }
+    _onUpdateControllerTime=0;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    if(_onUpdateControllerTime>now){
+      return;
+    }
+    _onUpdateControllerTime=now+500;
     
+    final controller = _controller;
+    if(controller==null){
+      debugPrint("controller is null");
+      return;
+    }
+    if (!controller.value.isInitialized){
+      debugPrint("controller cannot be initialized");
+      return;
+    }
+    final playing = controller.value.isPlaying;
+    _isPlaying=playing;
+  }
+
+
+  _initializeVideo(int index) async {
+    final controller = VideoPlayerController.networkUrl(Uri.parse(videoInfo[index]['videoURL']),
+);
+    final old = _controller;
+    _controller = controller;
+    if(old!=null){
+      old.removeListener(_onControllerUpdate);
+      old.pause();
+    }
+    
+    setState(() {
+      
+    });
+    controller..initialize().then((_) {
+      old?.dispose();
+      controller.addListener(_onControllerUpdate);
+      controller.play();
+      setState(() {
+        
+      });
+    });
   }
   _listView() {
     return ListView.builder(
@@ -242,7 +363,7 @@ class _VideoInfoState extends State<VideoInfo> {
                     itemBuilder: (_,int index){
                     return GestureDetector(
                       onTap: () {
-                        _onTapVideo(index);
+                        _initializeVideo(index);
                         debugPrint(index.toString());
                         setState(() {
                           if(_playArea==false){

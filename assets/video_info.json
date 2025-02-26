@@ -2,23 +2,27 @@
 {
     "title": "Squat and Walk",
     "time": "45 sec",
-    "thumbnail": "assets/workout1.png"
+    "thumbnail": "assets/workout1.png",
+    "videoURL" : "https://rutube.ru/video/d183f850503e43dd6790dbe9235af458/?r=wd"
 },
 {
     "title": "Squat and Walk",
     "time": "45 sec",
-    "thumbnail": "assets/workout2.png"
-},
-
-{
-    "title": "Squat and Walk",
-    "time": "45 sec",
-    "thumbnail": "assets/workout3.png"
+    "thumbnail": "assets/workout2.png",
+    "videoURL" : "#"
 },
 
 {
     "title": "Squat and Walk",
     "time": "45 sec",
-    "thumbnail": "assets/workout4.png"
+    "thumbnail": "assets/workout3.png",
+    "videoURL" : "#"
+},
+
+{
+    "title": "Squat and Walk",
+    "time": "45 sec",
+    "thumbnail": "assets/workout4.png",
+    "videoURL" : "#"
 }
 ]

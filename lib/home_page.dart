@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.only(top: 70, left: 30, right: 30),
+        padding: const EdgeInsets.only(top: 20,left: 30, right: 30),
         child: Column(
           children: [
             Row(

@@ -1,7 +1,7 @@
 ## Скриншоты
 
 ### Главный экран
-![Главный экран](Screenshot_main_page-small.png)
+<img src="Screenshot_main_page.png" alt="Главный экран" style="width: 400px;">
 
 
 

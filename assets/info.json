@@ -1,0 +1,21 @@
+[
+    {
+        "title": "Stretching",
+        "img": "assets/exs1.png"
+    },
+
+    {
+        "title": "Cardio",
+        "img": "assets/exs2.png"
+    },
+    
+    {
+        "title": "Legs",
+        "img": "assets/exs3.png"
+    },
+
+    {
+        "title": "Abs",
+        "img": "assets/exs4.png"
+    }
+]
